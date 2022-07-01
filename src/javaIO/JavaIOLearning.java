@@ -11,13 +11,24 @@ public class JavaIOLearning {
         String projectDir = System.getProperty("user.dir");
         //Check out the children of input Stream
         try(InputStream inputStream = new FileInputStream(projectDir+READ_RESOURCE)){
-            System.out.println((char)inputStream.read());
+            //System.out.println((char)inputStream.read());
 //            long skip = inputStream.skip(2);
 //            System.out.println("Skipped: " + skip);
 //            if(inputStream.markSupported()){
 //                System.out.println("This input stream is marked as supported");
 //            }
 //            inputStream.reset(); //resetting the marked positions
+
+            //The below logic won't work on a network socket as the application wouldn't know
+            // when the stream would be completed by the other end of the network.
+
+            // But the below logic would work for an image file/audio file or a non character file
+            // where EOF will be present
+            int dataInt = inputStream.read();
+            while(dataInt != -1){
+                System.out.print((char)dataInt);
+                dataInt = inputStream.read();
+            }
         }catch (IOException ex){
             Logger.getGlobal().log(Level.SEVERE, "Not able to read the file " + projectDir+READ_RESOURCE);
             ex.printStackTrace();
